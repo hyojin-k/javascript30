@@ -58,6 +58,31 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  function playSound(e){
+    // console.log(e.keyCode);
+    const audio = document.querySelector(`audio[data-key='${e.keyCode}']`);
+    const key = document.querySelector(`.key[data-key='${e.keyCode}']`);
+    if(!audio) return; // 해당되지 않는 알파벳은 적용 x
+    audio.currentTime = 0; // 딜레이없이 소리 반복
+    audio.play();
+    // key.addClass('playing') // jquery
+    key.classList.add('playing');
+  }
+
+  function removeTransition(e){
+    // console.log(e); //transition 된 모든 사항을 출력
+    if(e.propertyName !== 'transform') return;
+    // console.log(e.propertyName);
+    // console.log(this);
+    this.classList.remove('playing');
+  }
+
+  const keys = document.querySelectorAll('.key');
+  // keys.addEventListener('transitionend');
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition)); // transition이 끝나면 remove 실행
+  // console.log(key);
+
+  window.addEventListener('keydown', playSound);
 
 </script>
 
