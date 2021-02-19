@@ -7,6 +7,22 @@
 </head>
 <body>
 <script>
+  const pressed = [];
+  const secretCode = 'wesbos';
+
+  window.addEventListener('keyup',(e) => {
+    console.log(e.key);  // 키보드버튼 출력
+    pressed.push(e.key);  // 누적된 배열 출력
+    pressed.splice(-secretCode.length -1, pressed.length - secretCode.length);
+    // secretCode 크기만큼 제한
+    // 음수 인덱스, 추가 입력시 초기 입력값을 삭제
+
+    if (pressed.join('').includes(secretCode)){
+      console.log('GOOD');  // secretCode 문자를 제대로 입력시 출력
+      cornify_add();        // 화면에 이미지 출력
+    }
+    console.log(pressed);
+  });
 </script>
 </body>
 </html>
