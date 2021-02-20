@@ -58,6 +58,33 @@
       };
     }
 
+    const sliderImages = document.querySelectorAll('.slide-in');
+
+    function checkSlide(e){
+      // console.count(e);
+      // console.log(window.scrollY); // window 상에서의 위치
+
+      sliderImages.forEach(sliderImage => {
+        // 화면 상단에서 내려오면서 이미지의 50%에 달했을때 이미지 등장하도록
+        const slideInAt = (window.scrollY + window.innerHeight) - sliderImage.height / 2; // 화면 하단부분의 위치값 - 이미지높이의 50%
+        // console.log(slideInAt);
+
+        // 화면 하단에서 올라갈때도 적용되도록 설정
+        const imageBottom = sliderImage.offsetTop + sliderImage.height;  // 화면 상단에서 이미지 상단까지의 거리 + 이미지 높이
+
+        // 이미지 등장 구간 설정
+        const isHalfShown = slideInAt > sliderImage.offsetTop;
+        const isNotScrolledPast = window.scrollY < imageBottom;
+        if(isHalfShown && isNotScrolledPast){
+          sliderImage.classList.add('active');
+        } else{
+          sliderImage.classList.remove('active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', debounce(checkSlide));  // wait 숫자에 따라 scroll이 수행되도록 설정
+
   </script>
 
   <style>
