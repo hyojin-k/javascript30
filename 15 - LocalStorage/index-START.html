@@ -28,7 +28,52 @@
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const items = [];
+  const items = JSON.parse(localStorage.getItem('items')) || [];  // 새로고침해도 list 유지
+
+  function addItem(e){
+    e.preventDefault(); // 자동으로 refresh 안되게
+    // console.log('hello');
+    const text = (this.querySelector('[name=item]')).value; // input 값
+    const item = {
+      text,
+      done : false
+    };
+    // console.log(item);
+    items.push(item); // 배열에 삽입
+    populateList(items, itemsList);
+    // localStorage.setItem('items', items);  // [object, object]
+    localStorage.setItem('items', JSON.stringify(items));
+    this.reset(); // form element
+  }
+
+  function populateList(plates = [], platesList){  // 입력값을 html에 삽입
+    platesList.innerHTML = plates.map((plate, i) => {
+      return `
+        <li>
+            <input type="checkbox" data-index=${i} id="item${i}" ${plate.done ? 'checked' : ''}/>  <!-- 기본설정은 checked-->
+            <label for="item${i}">${plate.text}</label>
+        </li>
+      `;
+    }).join('');
+  }
+
+  function toggleDone(e){
+    if(!e.target.matches('input')) return;
+    // console.log(e.target);
+    const el = e.target;
+    const index = el.dataset.index;
+    items[index].done = !items[index].done;  // 새로고침해도 checkbox 값 유지
+    localStorage.setItem('items', JSON.stringify(items));
+    populateList(items, itemsList);
+  }
+
+  addItems.addEventListener('submit', addItem);
+  itemsList.addEventListener('click', toggleDone);
+
+  populateList(items, itemsList);
+
+  // const checkBoxes = document.querySelectorAll('input');
+  // checkBoxes.forEach(input => input.addEventListener('click', () => alert('hi')))
 
 </script>
 
