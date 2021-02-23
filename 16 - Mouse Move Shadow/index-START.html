@@ -35,6 +35,39 @@
   </style>
 
 <script>
+  const hero = document.querySelector('.hero');
+  const text = hero.querySelector('h1');
+  const walk = 100; // 100px
+
+  function shadow(e){
+    // console.log(e);
+
+    // const width = hero.offsetWidth;
+    // const height = hero.offsetHeight;
+    const{ offsetWidth: width, offsetHeight:height } = hero;
+    let{ offsetX: x , offsetY:y} = e;
+
+    // console.log(x,y);  // mousemove 좌표, h1 구간에서는 좌표가 새로 잡힘
+
+    // console.log(this, e.target); // hero, h1;
+    if(this !== e.target){
+      x = x + e.target.offsetLeft;
+      y = y + e.target.offsetTop;
+    }
+    // console.log(x,y);  // h1 구간 포함해서 좌표 제대로 찍히게
+
+    const xWalk = Math.round((x / width * walk) - (walk / 2));
+    const yWalk = Math.round((y / height * walk) - (walk / 2));
+
+    // console.log(xWalk, yWalk);  // 정중앙을 기준으로 한 거리 좌표
+
+    text.style.textShadow = `
+      ${xWalk}px ${yWalk}px 0 red,
+      ${xWalk * -1}px ${yWalk * -1}px 0 blue
+      `;
+  }
+
+  hero.addEventListener('mousemove', shadow);
 </script>
 </body>
 </html>
