@@ -182,6 +182,30 @@
     </li>
   </ul>
 <script>
+  // const timeNodes = document.querySelectorAll('[data-time]'); // array x
+  // console.log(timeNodes);
+
+  const timeNodes = Array.from(document.querySelectorAll('[data-time]'));
+
+  const seconds = timeNodes
+    .map(node => node.dataset.time)
+    .map(timeCode => {
+      const [mins, secs] = timeCode.split(':').map(parseFloat);  // 분,초 분리, string => number
+      return (mins * 60) + secs;
+      // console.log(mins,secs);
+    })
+    .reduce((total, vidSeconds) => total + vidSeconds);  // 전체 비디오 시간 합계
+
+    // console.log(seconds);
+
+  let secondsLeft = seconds;
+  const hours = Math.floor(secondsLeft / 3600);
+  secondsLeft = secondsLeft % 3600; // 나머지값
+
+  const mins = Math.floor(secondsLeft / 60);
+  secondsLeft = secondsLeft % 60;
+
+  console.log(hours, mins, secondsLeft);
 </script>
 </body>
 </html>
