@@ -35,6 +35,46 @@
   const options = document.querySelectorAll('[type="range"], [name="text"]');
   const speakButton = document.querySelector('#speak');
   const stopButton = document.querySelector('#stop');
+
+  msg.text = document.querySelector('[name="text"]').value;
+
+  function populateVoices(){  // voice list 추가
+    voices = this.getVoices();
+    // console.log(voices);
+    const voiceOptions = voices
+      .filter(voice => voice.lang.includes('en'))  // 언어를 english로 제한
+      .map(voice => `<option value = "${voice.name}">${voice.name} (${voice.lang})</option>`)
+      .join('');
+    voicesDropdown.innerHTML = voiceOptions;
+  }
+
+  function setVoice(){
+    // console.log(this.value);
+    msg.voice = voices.find(voice => voice.name === this.value);  // 선택한 옵션에 따라 보이스 변경
+    toggle();
+  }
+
+  function toggle(startOver = true){   // 옵션 변경시 자동재생
+    speechSynthesis.cancel();
+    if(startOver){
+      speechSynthesis.speak(msg);
+    }
+  }
+
+  function setOption(){  // rate, pitch 변경
+    console.log(this.name, this.value);
+    msg[this.name] = this.value;
+    toggle();
+  }
+
+  speechSynthesis.addEventListener('voiceschanged', populateVoices);
+  voicesDropdown.addEventListener('change', setVoice);
+  options.forEach(option => option.addEventListener('change', setOption));
+
+  speakButton.addEventListener('click', toggle);
+  // stopButton.addEventListener('click', toggle.bind(null, false));
+  stopButton.addEventListener('click', () => toggle(false));
+
 </script>
 
 </body>
