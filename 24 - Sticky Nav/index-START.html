@@ -54,7 +54,21 @@
   </div>
 
 <script>
+  const nav = document.querySelector('#main');
+  const topOfNav = nav.offsetTop;  // 화면상단에서 nav까지의 높이
 
+  function fixNav(){
+    console.log(topOfNav, window.scrollY);
+    if(window.scrollY >= topOfNav){
+      document.body.style.paddingTop = nav.offsetHeight + 'px';  // nav position이 fixed 되면서 생기는 움직임 조정
+      document.body.classList.add('fixed-nav');
+    } else {
+      document.body.style.paddingTop = 0;
+      document.body.classList.remove('fixed-nav');
+    }
+  }
+
+  window.addEventListener('scroll', fixNav);
 </script>
 
 </body>
