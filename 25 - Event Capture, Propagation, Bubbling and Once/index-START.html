@@ -40,9 +40,30 @@
   }
 </style>
 
-<button></button>
+<button>CLICK</button>
 <script>
+  const divs = document.querySelectorAll('div');
+  const button = document.querySelector('button');
 
+  function logText(e){
+    console.log(this.classList.value);
+    // three 부분을 클릭하면 three, two, one 겹치는 모든 class를 출력 (bubble up)
+
+    e.stopPropagation(); // bubbling 방지, 클릭한 해당 구간만 출력
+  }
+
+  // document.body.addEventListener('click', logText);  // bod 까지 출력
+
+  divs.forEach(div => div.addEventListener('click', logText, {capture: false, once: true}));
+  // capture: true 부모-자식 순으로 one, two, three 출력 (bubble down)
+  // capture: false default 값, 자식-부모 순 (bubble up)
+  // once : true 중복없이 한 번만 출력
+
+  button.addEventListener('click', () => {
+    console.log('click');
+  },{
+    once:true
+  });
 </script>
 </body>
 </html>
