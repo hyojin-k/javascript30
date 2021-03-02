@@ -5,8 +5,9 @@
   <title>Follow Along Nav</title>
 </head>
 <body>
-  <h2>Cool</h2>
+<!--  <h2>Cool</h2>-->
   <nav class="top">
+<!--    흰 배경 부분-->
     <div class="dropdownBackground">
       <span class="arrow"></span>
     </div>
@@ -220,6 +221,48 @@
 </style>
 
 <script>
+  const triggers = document.querySelectorAll('.cool > li');
+  const background = document.querySelector('.dropdownBackground');
+  const nav = document.querySelector('.top');
+
+  function handleEnter(){
+    // console.log('enter');
+    this.classList.add('trigger-enter');
+    
+    // setTimeout(() => {
+    //   if(this.classList.contains('trigger-enter')){  // 마우스를 빠르게 이동할때 150 이내에 이동하면 이전 dropdown 내용이 안보이게
+    //     this.classList.add('trigger-enter-active')
+    //   }
+    // }, 150);
+    setTimeout(() => this.classList.contains('trigger-enter') && this.classList.add('trigger-enter-active'), 150);
+    background.classList.add('open');
+
+    const dropdown = this.querySelector('.dropdown');
+    const dropdownCoords = dropdown.getBoundingClientRect();  // dropdown 위치 정보
+    console.log(dropdownCoords);
+    const navCoords = nav.getBoundingClientRect();  // nav 상단에 다른 것이 추가되는 경우 방지
+
+    const coords = {
+      width: dropdownCoords.width,
+      height: dropdownCoords.height,
+      left: dropdownCoords.left - navCoords.left,
+      top: dropdownCoords.top - navCoords.top
+    };
+
+    background.style.setProperty('width', `${coords.width}px`);  // dropdown 크기만큼 흰 배경 크기 변경
+    background.style.setProperty('height', `${coords.height}px`);
+    background.style.setProperty('transform', `translate(${coords.left}px, ${coords.top}px)`);
+  }
+
+
+  function handleLeave(){
+    // console.log('leave');
+    this.classList.remove('trigger-enter', 'trigger-enter-active');
+    background.classList.remove('open');
+  }
+
+  triggers.forEach(trigger => trigger.addEventListener('mouseenter', handleEnter));
+  triggers.forEach(trigger => trigger.addEventListener('mouseleave', handleLeave));
 </script>
 
 </body>
