@@ -15,6 +15,28 @@
   </div>
 
 <script>
+  const speed = document.querySelector('.speed');
+  const bar = speed.querySelector('.speed-bar');
+  const video = document.querySelector('.flex');
+
+  speed.addEventListener('mousemove', function(e){
+    // console.log(e);
+    const y = e.pageY - this.offsetTop;
+    const percent = y / this.offsetHeight; // bar 내부 마우스 위치 percent
+    console.log(percent);
+    const min = 0.4;
+    const max = 4;
+    const height = Math.round(percent * 100) + '%';
+    console.log(height);
+
+    const playbackRate = percent * (max - min) + min;  // mousemove에 따라 bar 움직이도록
+    console.log(playbackRate);
+
+    bar.style.height = height;
+    bar.textContent = playbackRate.toFixed(2) + 'x';  // bar에서 보이는 속도 텍스트변경
+
+    video.playbackRate = playbackRate; // bar의 속도를 비디오에 적용
+  })
 </script>
 </body>
 </html>
