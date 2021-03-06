@@ -36,6 +36,57 @@
   const holes = document.querySelectorAll('.hole');
   const scoreBoard = document.querySelector('.score');
   const moles = document.querySelectorAll('.mole');
+  let lastHole;
+  let timeUp = false;
+  let score = 0;
+
+  function randomTime(min, max){
+    return Math.round(Math.random() * (max - min) + min);
+  }
+
+  function randomHole(holes){
+    // console.log(holes.length);  // 6
+    const idx = Math.floor(Math.random() * holes.length);
+    const hole = holes[idx];
+    // console.log(hole);  // 1-6 랜덤 추출, 연속으로 같은 수 나올 수 있음
+
+    if(hole === lastHole){   // 같은 수가 연속으로 나오지 않도록
+      console.log('같은 숫자 반복');
+      return randomHole(holes);
+    }
+    lastHole = hole;
+    return hole;
+  }
+
+  function peep(){  // 랜덤으로 이미지 등장
+    const time = randomTime(200, 1000);
+    const hole = randomHole(holes);
+    // console.log(time, hole);
+    hole.classList.add('up');
+
+    setTimeout(() => {  // 이미지가 자동으로 등장,사라짐 반복
+      hole.classList.remove('up');
+      if(!timeUp) peep();  // false - 동작 반복, true - 멈춤
+    },time);
+  }
+
+  function startGame(){
+    scoreBoard.textContent = 0;
+    timeUp = false;
+    score = 0;
+    peep();
+    setTimeout(() => timeUp = true, 10000); // 10초 후 동작 멈춤
+  }
+
+  function bonk(e){  // 이미지 클릭한 숫자 카운트
+    // console.log(e);
+    if(!e.isTrusted) return;
+    score++;
+    this.classList.remove('up');
+    scoreBoard.textContent = score;
+  }
+
+  moles.forEach(mole => mole.addEventListener('click', bonk));
 
 </script>
 </body>
