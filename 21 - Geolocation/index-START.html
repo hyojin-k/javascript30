@@ -59,6 +59,19 @@
     /*Compass: https://thenounproject.com/search/?q=compass&i=592352*/
   </style>
   <script>
+    // ios에서 가능
+    const arrow = document.querySelector('.arrow');
+    const speed = document.querySelector('.speed-value');
+
+    navigator.geolocation.watchPosition((data) => { // 장치의 위치가 바뀔 때마다 실행
+      console.log(data);
+      speed.textContent = data.coords.speed;  // KM/H text 출력
+
+      arrow.style.transform = `rotate(${data.coords.heading}deg)`; // 나침반 기울기
+    }, (err) => {
+      console.err(err);
+      alert('You gotta allow that to happen');
+    });
   </script>
 </body>
 </html>
