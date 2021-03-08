@@ -12,6 +12,33 @@
 <script>
   window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
+  const recognition = new SpeechRecognition();
+  recognition.interimResults = true;  // 실시간 음성 인식
+
+  let p = document.createElement('p');  // 인식한 음성을 삽입
+  const words = document.querySelector('.words');
+  words.appendChild(p);
+
+  recognition.addEventListener('result', e => {
+    // console.log(e.results);  // not array
+    const transcript = Array.from(e.results)
+      .map(result => result[0])
+      .map(result => result.transcript)  // 음성 인식 후 배열에 출력
+      .join('');  // 인식 값을 누적해서 출력
+
+      p.textContent = transcript;  // 인식 값을 화면에 출력
+      if(e.results[0].isFinal){   // 텀을 두고 말하면 기존 것을 덮지 않고 새로운 문단 생성하도록
+        p = document.createElement('p');
+        words.appendChild(p);
+      }
+      if(transcript.includes('dog')){  // 해당 문구가 포함되어있을 경우 콘솔창에 이모지 생성
+        console.log('🐶🐶🐶🐶🐶🐶🐶');
+      }
+    console.log(transcript);
+  });
+
+  recognition.addEventListener('end', recognition.start);  // 텀을 두고 말해도 다음 콘솔창에 이어서 인식
+  recognition.start();
 
 </script>
 
